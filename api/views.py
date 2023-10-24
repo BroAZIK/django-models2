@@ -59,10 +59,10 @@ class ProductView(View):
         )
         return JsonResponse({'message': 'object created.'}, status=201)
 
-    def put(self, request: HttpRequest) -> JsonResponse:
+    def put(self, request: HttpRequest, pk: int) -> JsonResponse:
         pass
 
-    def delete(self, request: HttpRequest) -> JsonResponse:
+    def delete(self, request: HttpRequest, pk: int) -> JsonResponse:
         pass
 
     

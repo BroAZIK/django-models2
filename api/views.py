@@ -1,6 +1,7 @@
 from django.views import View
 from django.http import HttpRequest, JsonResponse
 from .models import Product
+import json
 
 
 
@@ -40,7 +41,23 @@ class ProductView(View):
             return JsonResponse(results)
 
     def post(self, request: HttpRequest) -> JsonResponse:
-        pass
+        """Add new product
+
+        Args:
+            request (HttpRequest): HttpRequest object.
+
+        Returns:
+            JsonResponse: HttpResponse object.
+        """
+        body = request.body.decode()
+        data = json.loads(body)
+
+        Product.objects.create(
+            name=data.get('name'),
+            description=data.get('description'),
+            price=data.get('price')
+        )
+        return JsonResponse({'message': 'object created.'}, status=201)
 
     def put(self, request: HttpRequest) -> JsonResponse:
         pass

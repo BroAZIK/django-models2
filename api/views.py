@@ -6,6 +6,15 @@ from .models import Product
 
 class ProductView(View):
     def get(self, request: HttpRequest, pk=None) -> JsonResponse:
+        """Get all products or product
+
+        Args:
+            request (HttpRequest): HttpRequest object.
+            pk (_type_, optional): pk for getting product as id. Defaults to None.
+
+        Returns:
+            JsonResponse: JsonResponse
+        """
         if pk is None:
             products = Product.objects.all()
 

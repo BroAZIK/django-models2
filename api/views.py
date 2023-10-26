@@ -60,9 +60,40 @@ class ProductView(View):
         return JsonResponse({'message': 'object created.'}, status=201)
 
     def put(self, request: HttpRequest, pk: int) -> JsonResponse:
-        pass
+        """Update old product attributes
+
+        Args:
+            request (HttpRequest): HttpRequest object
+            pk (int): pk of old product id
+
+        Returns:
+            JsonResponse: JsonResponse object
+        """
+        body = request.body.decode()
+        data = json.loads(body)
+
+        product = Product.objects.get(id=pk)
+
+        product.name = data.get('name', product.name)
+        product.description = data.get('description', product.description)
+        product.price = data.get('price', product.price)
+
+        product.save()
+
+        return JsonResponse({'message': 'updated.'})
 
     def delete(self, request: HttpRequest, pk: int) -> JsonResponse:
-        pass
+        """Delete product
 
-    
+        Args:
+            request (HttpRequest): HttpRequest object
+            pk (int): pk of old product id
+
+        Returns:
+            JsonResponse: JsonResponse object
+        """
+        product = Product.objects.get(id=pk)
+        product.delete()
+
+        return JsonResponse({'message': 'deleted.'})
+

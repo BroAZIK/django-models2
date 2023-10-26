@@ -97,7 +97,6 @@ class ProductView(View):
 
         return JsonResponse({"message": "updated."}, status=203)
 
-
     def delete(self, request: HttpRequest, pk: int) -> JsonResponse:
         """Delete product
 
@@ -112,4 +111,3 @@ class ProductView(View):
         product.delete()
 
         return JsonResponse({"message": "deleted."}, status=204)
-

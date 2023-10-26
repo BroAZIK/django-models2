@@ -1,6 +1,6 @@
 from django.views import View
 from django.http import HttpRequest, JsonResponse
-from api.models import Product
+from .models import Product
 import json
 
 
@@ -59,7 +59,7 @@ class ProductView(View):
         )
         return JsonResponse({'message': 'object created.'}, status=201)
 
-    def put(self, request: HttpRequest, pk: int) -> JsonResponse:
+    def put(self, request: HttpRequest, pk=None) -> JsonResponse:
         """Update old product attributes
 
         Args:
@@ -70,7 +70,22 @@ class ProductView(View):
             JsonResponse: JsonResponse object
         """
         body = request.body.decode()
-        data = json.loads(body)
+        data: dict = json.loads(body)
+
+        if pk is None:
+            queryset = Product.objects
+
+            if data.get('name'):
+                queryset.update(name=data.get('name'))
+
+            if data.get('description'):
+                queryset.update(description=data.get('description'))
+
+            if data.get('price'):
+                queryset.update(price=data.get('price'))
+
+            return JsonResponse({"message": "updated all."})
+
 
         product = Product.objects.get(id=pk)
 
@@ -80,7 +95,8 @@ class ProductView(View):
 
         product.save()
 
-        return JsonResponse({'message': 'updated.'})
+        return JsonResponse({"message": "updated."}, status=203)
+
 
     def delete(self, request: HttpRequest, pk: int) -> JsonResponse:
         """Delete product
@@ -95,5 +111,5 @@ class ProductView(View):
         product = Product.objects.get(id=pk)
         product.delete()
 
-        return JsonResponse({'message': 'deleted.'})
+        return JsonResponse({"message": "deleted."}, status=204)
 

@@ -1,6 +1,6 @@
 from django.views import View
 from django.http import HttpRequest, JsonResponse
-from .models import Product
+from api.models import Product
 import json
 
 

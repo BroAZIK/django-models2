@@ -17,7 +17,15 @@ class ProductView(View):
             JsonResponse: JsonResponse
         """
         if pk is None:
-            products = Product.objects.all()
+
+            query_params = request.GET
+
+            quantity = query_params.get('quantity')
+
+            if quantity is not None:
+                products = Product.objects.filter(quantity=quantity)
+            else:
+                products = Product.objects.all()
 
             results = []
             for product in products:
@@ -26,6 +34,9 @@ class ProductView(View):
                     "name": product.name,
                     "description": product.description,
                     "price": product.price,
+                    "quantity": product.quantity,
+                    "created_at": product.created_at,
+                    "updated_at": product.updated_at,
                 })
 
             return JsonResponse(results, safe=False)

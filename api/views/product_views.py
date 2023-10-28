@@ -2,6 +2,7 @@ from django.views import View
 from django.http import HttpRequest, JsonResponse
 from api.models import Product
 import json
+from django.db.models import Q
 
 
 
@@ -20,10 +21,11 @@ class ProductView(View):
 
             query_params = request.GET
 
-            quantity = query_params.get('quantity')
+            mx = query_params.get('max')
+            mn = query_params.get('min')
 
-            if quantity is not None:
-                products = Product.objects.filter(quantity=quantity)
+            if mx is not None and mn is not None:
+                products = Product.objects.filter(Q(price__lt=mx) & Q(price__gte=mn))
             else:
                 products = Product.objects.all()
 
@@ -34,7 +36,6 @@ class ProductView(View):
                     "name": product.name,
                     "description": product.description,
                     "price": product.price,
-                    "quantity": product.quantity,
                     "created_at": product.created_at,
                     "updated_at": product.updated_at,
                 })

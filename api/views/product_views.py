@@ -3,6 +3,7 @@ from django.http import HttpRequest, JsonResponse
 from api.models import Product
 import json
 from django.db.models import Q
+from django.forms import model_to_dict
 
 
 
@@ -25,20 +26,13 @@ class ProductView(View):
             mn = query_params.get('min')
 
             if mx is not None and mn is not None:
-                products = Product.objects.filter(Q(price__lt=mx) & Q(price__gte=mn))
+                products = Product.objects.filter(Q(price__lt=mx) & Q(price__gte=mn)).order_by("price")
             else:
-                products = Product.objects.all()
+                products = Product.objects.order_by("price")
 
             results = []
             for product in products:
-                results.append({
-                    "id": product.id,
-                    "name": product.name,
-                    "description": product.description,
-                    "price": product.price,
-                    "created_at": product.created_at,
-                    "updated_at": product.updated_at,
-                })
+                results.append(model_to_dict(product))
 
             return JsonResponse(results, safe=False)
         else:

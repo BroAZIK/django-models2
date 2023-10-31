@@ -122,4 +122,8 @@ class ProductView(View):
 
 class HomeView(View):
     def get(self, request) -> HttpResponse:
-        return render(request, 'index.html')
+        context = {
+            'products': Product.objects.all()
+        }
+        return render(request, 'index.html', context=context)
+

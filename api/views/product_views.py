@@ -1,9 +1,10 @@
 from django.views import View
-from django.http import HttpRequest, JsonResponse
+from django.http import HttpRequest, JsonResponse, HttpResponse
 from api.models import Product
 import json
 from django.db.models import Q
 from django.forms import model_to_dict
+from django.shortcuts import render
 
 
 
@@ -117,3 +118,8 @@ class ProductView(View):
         product.delete()
 
         return JsonResponse({"message": "deleted."}, status=204)
+
+
+class HomeView(View):
+    def get(self, request) -> HttpResponse:
+        return render(request, 'index.html')

@@ -123,7 +123,7 @@ class ProductView(View):
 class HomeView(View):
     def get(self, request) -> HttpResponse:
         context = {
-            'products': Product.objects.all()
+            'products': Product.objects.order_by('price')
         }
         return render(request, 'index.html', context=context)
 
